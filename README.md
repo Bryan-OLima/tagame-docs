@@ -1,103 +1,103 @@
-# TAGAME Documentation
+# Documentação do TAGAME
 
-TAGAME is a local-first NFC game launcher hosted on CasaOS. This repository is the public documentation and case-study repository for the project. The implementation is maintained in separate `tagame-server` and `tagame-agent` repositories.
+TAGAME é um iniciador local de jogos por NFC, hospedado no CasaOS. Este repositório reúne a documentação pública e o estudo de caso do projeto. A implementação será mantida separadamente nos repositórios `tagame-server` e `tagame-agent`.
 
-## Physical and deployment structure
+## Estrutura física e implantação
 
-The initial deployment is designed around three parts:
+A implantação inicial foi planejada em três partes:
 
 ```text
-NFC tag
+Tag NFC
    ↓
-Android or iOS phone
-   ↓ local network request
-Notebook running CasaOS
-   ↓ authenticated launch/stop event
-PC running Steam and the TAGAME agent
+Celular Android ou iOS
+   ↓ requisição pela rede local
+Notebook executando CasaOS
+   ↓ evento autenticado de início ou encerramento
+PC executando a Steam e o agente do TAGAME
 ```
 
-- **Phone:** reads the NFC tag and sends an authenticated request to TAGAME.
-- **Notebook with CasaOS:** hosts the TAGAME web application, API, event dispatcher, logs, and database.
-- **PC:** runs Steam, receives validated events through the TAGAME agent, and launches or stops the configured game.
+- **Celular:** lê a tag NFC e envia uma requisição autenticada ao TAGAME.
+- **Notebook com CasaOS:** hospeda a aplicação web, a API, a distribuição de eventos, os registros e o banco de dados.
+- **PC:** executa a Steam, recebe os eventos validados por meio do agente do TAGAME e inicia ou encerra o jogo configurado.
 
-The phone is the NFC reader, the notebook is the local server, and the PC is the execution machine. They may be separate physical devices on the same home network.
+O celular funciona como leitor NFC, o notebook como servidor local e o PC como máquina de execução. Eles podem ser aparelhos físicos separados, conectados à mesma rede doméstica.
 
-## Technology decisions
+## Decisões de tecnologia
 
-### Database: SQLite
+### Banco de dados: SQLite
 
-TAGAME will use **SQLite** for the initial deployment.
+O TAGAME utilizará **SQLite** em sua implantação inicial.
 
-SQLite is appropriate because the application is local-first, runs on one CasaOS notebook, receives a small number of NFC events, and does not need a separate database server. The database will be accessed by the TAGAME backend on the same machine; phones and PCs will communicate with the API, never directly with the database.
+O SQLite é adequado porque a aplicação prioriza o funcionamento local, será executada em um único notebook com CasaOS, receberá poucos eventos NFC e não precisa de um servidor de banco de dados separado. O banco será acessado pelo backend do TAGAME na mesma máquina. Celulares e computadores se comunicarão exclusivamente com a API, nunca diretamente com o banco.
 
-Initial database requirements:
+Requisitos iniciais do banco de dados:
 
-- enable `journal_mode = WAL`;
-- enable `foreign_keys = ON`;
-- configure a write `busy_timeout`;
-- use migrations from the first implementation;
-- store internal UUIDs as `TEXT` in canonical 36-character form;
-- store `steam_appid` as an integer external identifier;
-- keep the database file on a local CasaOS volume, not a network filesystem;
-- back up the database using a safe SQLite backup procedure, including any active WAL state.
+- habilitar `journal_mode = WAL`;
+- habilitar `foreign_keys = ON`;
+- configurar um `busy_timeout` para operações de escrita;
+- utilizar migrações desde a primeira implementação;
+- armazenar UUIDs internos como `TEXT` no formato canônico de 36 caracteres;
+- armazenar `steam_appid` como identificador externo inteiro;
+- manter o arquivo do banco em um volume local do CasaOS, e não em um sistema de arquivos de rede;
+- realizar cópias de segurança usando um procedimento seguro para SQLite, incluindo qualquer estado WAL ativo.
 
-PostgreSQL remains a possible future migration if TAGAME grows to require multiple application servers, substantially higher write concurrency, or direct database access by multiple machines. The logical relational model in `DB.md` must remain portable enough to support that evolution.
+O PostgreSQL permanece como uma possível migração futura caso o TAGAME passe a exigir vários servidores de aplicação, uma concorrência de escrita consideravelmente maior ou acesso direto ao banco por várias máquinas. O modelo relacional lógico descrito em `DB.md` deverá permanecer portável o suficiente para permitir essa evolução.
 
-## Documentation map
+## Mapa da documentação
 
-All normative documents are under `docs/`:
+Todos os documentos oficiais estão em `docs/`:
 
-| Document | Purpose |
+| Documento | Finalidade |
 |---|---|
-| [`PROJECT_VISION.md`](docs/PROJECT_VISION.md) | Product purpose, goals, and vocabulary |
-| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Components, communication, and trust boundaries |
-| [`UX.md`](docs/UX.md) | Information architecture, page inventory, flows, and UI states |
-| [`DB.md`](docs/DB.md) | Database schema and relationships |
-| [`RULES.md`](docs/RULES.md) | Business, security, and lifecycle rules |
-| [`CURRENT_STATE.md`](docs/CURRENT_STATE.md) | Approved decisions and unresolved choices |
-| [`ROADMAP.md`](docs/ROADMAP.md) | Planned delivery phases |
-| [`TASKS.md`](docs/TASKS.md) | Current task index |
-| [`COMMIT_CONVENTIONS.md`](docs/COMMIT_CONVENTIONS.md) | Commit message format |
-| [`AGENTS.md`](docs/AGENTS.md) | Instructions for AI agents working on the project |
+| [`PROJECT_VISION.md`](docs/PROJECT_VISION.md) | Propósito, objetivos e vocabulário do produto |
+| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Componentes, comunicação e limites de confiança |
+| [`UX.md`](docs/UX.md) | Arquitetura da informação, páginas, fluxos e estados da interface |
+| [`DB.md`](docs/DB.md) | Estrutura e relacionamentos do banco de dados |
+| [`RULES.md`](docs/RULES.md) | Regras de negócio, segurança e ciclo de vida |
+| [`CURRENT_STATE.md`](docs/CURRENT_STATE.md) | Decisões aprovadas e questões ainda não resolvidas |
+| [`ROADMAP.md`](docs/ROADMAP.md) | Etapas planejadas de entrega |
+| [`TASKS.md`](docs/TASKS.md) | Índice atual de tarefas |
+| [`COMMIT_CONVENTIONS.md`](docs/COMMIT_CONVENTIONS.md) | Formato obrigatório das mensagens de commit |
+| [`AGENTS.md`](docs/AGENTS.md) | Instruções para agentes de IA que trabalham no projeto |
 
-## Related repositories
+## Repositórios relacionados
 
-- `tagame-server` — CasaOS application containing the web UI, API, database integration, and event dispatcher.
-- `tagame-agent` — background execution bridge installed on target PCs.
+- `tagame-server` — aplicação do CasaOS que contém interface web, API, integração com o banco e distribuição de eventos.
+- `tagame-agent` — aplicação em segundo plano instalada nos computadores que executarão os jogos.
 
-## Initial technology direction
+## Direção tecnológica inicial
 
-- **CasaOS server:** full-stack web application with frontend, backend, SQLite, migrations, and event dispatching.
-- **PC agent:** C#/.NET Windows application with a simple Windows Forms configuration window and `NotifyIcon` tray interface.
-- **Reader devices:** Android and iOS integrations that read NFC tags and submit authenticated requests.
+- **Servidor no CasaOS:** aplicação web completa com frontend, backend, SQLite, migrações e distribuição de eventos.
+- **Agente no PC:** aplicação C#/.NET para Windows, com uma janela simples de configuração em Windows Forms e interface na área de notificação por meio de `NotifyIcon`.
+- **Aparelhos leitores:** integrações para Android e iOS que leem as tags NFC e enviam requisições autenticadas.
 
-The agent is expected to start with the user's Windows session, provide setup and connection status through the tray, and return to the tray after configuration. A separate Windows Service may be considered later if pre-login operation becomes necessary.
+O agente deverá iniciar com a sessão do usuário do Windows, disponibilizar configuração e estado da conexão na área de notificação e retornar para essa área após a configuração. Um Windows Service separado poderá ser considerado futuramente caso seja necessário operar antes da entrada do usuário no Windows.
 
-## NFC tag standard
+## Padrão das tags NFC
 
-TAGAME will use genuine **NXP NTAG213** tags in card or sticker form.
+O TAGAME utilizará tags **NXP NTAG213** autênticas, em formato de cartão ou adesivo.
 
-The NTAG213 is the preferred choice because it is a common NFC Forum Type 2 tag, works with the Android and iOS reader flows planned for TAGAME, is inexpensive, and provides the tag features we need: a stable hardware UID, NDEF storage, write locking, and optional write protection. The official NXP specification lists **144 bytes of user memory**, 10-year data retention, and up to 100,000 write cycles.
+A NTAG213 foi escolhida por ser uma tag NFC Forum Type 2 comum, compatível com os fluxos de leitura planejados para Android e iOS, ter baixo custo e oferecer os recursos necessários ao projeto: UID físico estável, armazenamento NDEF, bloqueio de escrita e proteção de escrita opcional. A especificação oficial da NXP informa **144 bytes de memória de usuário**, retenção de dados por 10 anos e até 100 mil ciclos de escrita.
 
-The 144-byte capacity is more than sufficient for TAGAME. A UUIDv4 in its canonical textual form uses 36 ASCII characters:
+A capacidade de 144 bytes é mais do que suficiente para o TAGAME. Um UUIDv4 em seu formato textual canônico utiliza 36 caracteres ASCII:
 
 ```text
 550e8400-e29b-41d4-a716-446655440000
 ```
 
-Even with the application prefix used by TAGAME, the payload is short:
+Mesmo com o prefixo da aplicação, a carga permanece curta:
 
 ```text
 tagame:550e8400-e29b-41d4-a716-446655440000
 ```
 
-This is approximately 43 bytes before the small NDEF record overhead, leaving substantial space within the 144-byte user area. The tag stores only this opaque identifier; the game name, Steam AppID, permissions, and execution rules remain in the CasaOS database.
+Isso representa aproximadamente 43 bytes antes da pequena sobrecarga do registro NDEF, deixando espaço suficiente dentro dos 144 bytes disponíveis. A tag armazenará apenas esse identificador opaco. Nome do jogo, Steam AppID, permissões e regras de execução permanecerão no banco de dados do CasaOS.
 
-NTAG215 and NTAG216 are not required for the initial project because their larger memory capacities would not provide a meaningful benefit for TAGAME. NTAG424 DNA may be evaluated later if strong anti-cloning authentication becomes a requirement, but it would add unnecessary cryptographic complexity for the initial local deployment.
+NTAG215 e NTAG216 não são necessárias para a primeira versão porque sua capacidade adicional não oferece benefício relevante ao TAGAME. A NTAG424 DNA poderá ser avaliada no futuro caso autenticação forte contra clonagem se torne um requisito, mas adicionaria complexidade criptográfica desnecessária à implantação local inicial.
 
-Reference: [NXP NTAG213/215/216 product specification](https://www.nxp.com/products/NTAG213_215_216).
+Referência: [especificação das NXP NTAG213/215/216](https://www.nxp.com/products/NTAG213_215_216).
 
-## Task organization
+## Organização das tarefas
 
 ```text
 tagame-docs/
@@ -115,26 +115,26 @@ tagame-docs/
             └── TASK_ARCHIVE.md
 ```
 
-## Task identifiers
+## Identificadores das tarefas
 
-The prefix describes the work area, not whether the change is a feature or a fix:
+O prefixo descreve a área do trabalho, não se a alteração é uma funcionalidade ou uma correção:
 
 ```text
 F001    Frontend
-UX001   User experience and information architecture
-UI001   Visual identity and design system
+UX001   Experiência do usuário e arquitetura da informação
+UI001   Identidade visual e design system
 B001    Backend
-DB001   Database
-OPS001  DevOps and infrastructure
-M001    Mobile and NFC reader integration
-PC001   PC agent
-QA001   Quality assurance and tests
-DOC001  Documentation
-SEC001  Security
+DB001   Banco de dados
+OPS001  DevOps e infraestrutura
+M001    Integração mobile e leitor NFC
+PC001   Agente para PC
+QA001   Garantia de qualidade e testes
+DOC001  Documentação
+SEC001  Segurança
 ```
 
-The numeric part is never reused. A completed or cancelled task remains represented in the archive.
+A parte numérica nunca será reutilizada. Uma tarefa concluída ou cancelada continuará representada no histórico.
 
-## Working on TAGAME
+## Trabalhando no TAGAME
 
-Agents must read `AGENTS.md`, choose an eligible task from `TASKS.md`, keep `.agent/CURRENT_TASK.md` updated, and follow the task's acceptance criteria. Humans can use `TASKS.md` and the archived history to understand what is planned and what has already been delivered.
+Os agentes devem ler `AGENTS.md`, selecionar uma tarefa elegível em `TASKS.md`, manter `.agent/CURRENT_TASK.md` atualizado e seguir os critérios de aceite da tarefa. Pessoas podem consultar `TASKS.md` e o histórico arquivado para compreender o que está planejado e o que já foi entregue.
