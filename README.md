@@ -67,7 +67,9 @@ Todos os documentos oficiais estão em `docs/`:
 
 ## Direção tecnológica inicial
 
-- **Servidor no CasaOS:** aplicação web completa com frontend, backend, SQLite, migrações e distribuição de eventos.
+- **Servidor no CasaOS:** aplicação web completa com frontend Angular, backend Express com TypeScript, SQLite, Prisma, Zod, migrações e distribuição de eventos.
+- **Autenticação:** usuários do painel web usarão JWT Bearer; leitores e agentes usarão credenciais próprias, revogáveis e armazenadas apenas como hashes no servidor.
+- **Comunicação:** o leitor NFC e o agente do PC se comunicarão exclusivamente por meio da API hospedada no CasaOS; eles não conversarão diretamente entre si.
 - **Agente no PC:** aplicação C#/.NET para Windows, com uma janela simples de configuração em Windows Forms e interface na área de notificação por meio de `NotifyIcon`.
 - **Aparelhos leitores:** integrações para Android e iOS que leem as tags NFC e enviam requisições autenticadas.
 

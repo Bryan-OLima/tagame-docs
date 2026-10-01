@@ -23,16 +23,21 @@ No production application, database migration, reader integration, or PC agent h
 - The system is local-first and does not require public exposure.
 - The initial database engine is SQLite.
 - SQLite will use WAL mode, foreign-key enforcement, a write busy timeout, and versioned migrations.
+- The backend will use Express with TypeScript, starting from the project's generic `ExpressTsScaffolding` repository.
+- Zod will validate untrusted API input and provide inferred TypeScript types at API boundaries.
+- Prisma will provide the typed database access layer and migration tooling for SQLite.
+- The web frontend will use Angular.
+- The web frontend will authenticate users with short-lived JWT Bearer access tokens.
+- Reader devices and PC agents will use separate revocable credentials; they will not use the web user's JWT.
+- The reader and PC agent will communicate through the CasaOS API; the reader will not communicate directly with the agent.
 - Internal UUIDs will be stored as `TEXT`; `steam_appid` remains an integer external identifier.
 
 ## Not yet decided
 
-- Application language and framework.
-- Concrete migration library/tooling.
-- Authentication implementation and password/session strategy.
+- Password hashing and the detailed JWT lifecycle, including refresh-token policy, token storage in the Angular client, key management, and revocation strategy.
 - Exact Android integration: Tasker/Termux or a native reader app.
 - Exact iOS integration: Shortcuts or a native reader app.
-- Agent transport: WebSocket, polling, HTTP callback, or SSH prototype.
+- Agent transport: WebSocket, polling, or HTTP callback. SSH remains a temporary development option only.
 - Exact graceful-stop implementation per game.
 - Single-PC versus multi-PC default selection behavior.
 

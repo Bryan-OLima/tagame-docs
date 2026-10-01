@@ -24,7 +24,9 @@ Provides login, administration, tag/game/PC management, device pairing, session 
 
 ### API
 
-Validates users, devices, tags, assignments, sessions, and agent events. Reader clients submit a tag token; they do not submit shell commands or unrestricted Steam commands.
+Validates users, devices, tags, assignments, sessions, and agent events. Reader clients submit a tag token; they do not submit shell commands or unrestricted Steam commands. The API is the central communication and authorization boundary: the reader and the PC agent do not communicate directly.
+
+Web users authenticate with JWT Bearer access tokens. Reader devices and PC agents authenticate with separate revocable credentials, whose hashes are stored by TAGAME. A user's web JWT must not be reused as a reader or agent credential.
 
 ### Database
 
@@ -48,7 +50,16 @@ A small non-AI C#/.NET Windows application installed on the PC. Its initial UI u
 
 ## Communication model
 
-The first implementation will use authenticated local HTTP requests from readers and an authenticated outbound polling or WebSocket connection from the PC agent. SSH may be used for a temporary development prototype only; it is not the primary production transport.
+The first implementation will use authenticated local HTTP requests from readers and an authenticated outbound connection from the PC agent. The initial agent transport will be selected between polling, HTTP callback, or WebSocket; it must preserve the API as the central boundary. SSH may be used for a temporary development prototype only; it is not the primary production transport.
+
+The logical flow is:
+
+```text
+Reader -> API: authenticated tag activation request
+API -> Agent: constrained start/stop event
+Agent -> API: acknowledgement, heartbeat, and lifecycle result
+API -> Web UI: authenticated status and history queries
+```
 
 ## Command and session lifecycle
 
