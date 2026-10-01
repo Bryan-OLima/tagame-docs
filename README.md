@@ -51,6 +51,7 @@ Todos os documentos oficiais estão em `docs/`:
 |---|---|
 | [`PROJECT_VISION.md`](docs/PROJECT_VISION.md) | Propósito, objetivos e vocabulário do produto |
 | [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Componentes, comunicação e limites de confiança |
+| [`API.md`](docs/API.md) | Contrato inicial da API, autenticação e eventos do agente |
 | [`UX.md`](docs/UX.md) | Arquitetura da informação, páginas, fluxos e estados da interface |
 | [`DB.md`](docs/DB.md) | Estrutura e relacionamentos do banco de dados |
 | [`RULES.md`](docs/RULES.md) | Regras de negócio, segurança e ciclo de vida |
