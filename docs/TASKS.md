@@ -18,8 +18,7 @@ Tasks are selected by area prefix and numeric order. When the user says “pick 
 
 | ID | Area | Title | Status | Owner | Dependencies |
 |---|---|---|---|---|---|
-| UX001 | UX | Define information architecture and low-fidelity wireframes | ready | — | — |
-| UI001 | UI | Define visual identity and design system | blocked | — | UX001 |
+| UI001 | UI | Define visual identity and design system | ready | — | UX001 (done) |
 | F001 | Frontend | Create admin panel | blocked | — | UX001, UI001, B001 |
 | B001 | Backend | Create API and database foundation | ready | — | — |
 | DB001 | Database | Create initial migrations | ready | — | — |

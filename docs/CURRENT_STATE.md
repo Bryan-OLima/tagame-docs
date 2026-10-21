@@ -31,6 +31,14 @@ No production application, database migration, reader integration, or PC agent h
 - Reader devices and PC agents will use separate revocable credentials; they will not use the web user's JWT.
 - The reader and PC agent will communicate through the CasaOS API; the reader will not communicate directly with the agent.
 - Internal UUIDs will be stored as `TEXT`; `steam_appid` remains an integer external identifier.
+- The information architecture, role visibility, primary user flows, responsive behavior, and low-fidelity webapp and PC-agent wireframes are approved under `UX001`.
+- First-time setup creates only the initial administrator and continues to normal Login after success.
+- Initial-administrator recovery uses a secret recovery code displayed once, with local CasaOS physical-access recovery as fallback; implementation security details remain to be specified.
+- Guests may see the PC name and safe event details only for their own permitted activity, and see only a summary of their own reader devices.
+- Complex creation, pairing, assignment, and recovery flows use full pages; simple edits may use desktop drawers; mobile uses full pages.
+- Reader feedback separates acknowledgement from final game-session state.
+- Database restoration requires administrator reauthentication, a pre-restore backup, an impact summary, and typed confirmation.
+- Changing the PC agent's server address requires re-pairing, and its tray icon distinguishes online-idle from game-running state.
 
 ## Not yet decided
 

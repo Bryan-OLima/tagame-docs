@@ -1,6 +1,6 @@
 # TAGAME — User Experience Specification
 
-Status: initial information architecture approved; low-fidelity wireframes pending under `UX001`.
+Status: approved under completed task `UX001`.
 
 ## Purpose
 
@@ -93,9 +93,24 @@ The assignment relationship is managed through the tag experience as `tag -> gam
 
 Shown only when no administrator exists. It creates the initial admin account and verifies that the local server can persist data. The page must not allow creation of a second initial admin after setup is complete.
 
+The initial flow is:
+
+```text
+check server and setup state
+  -> introduce local setup
+  -> create administrator account
+  -> review non-secret account details
+  -> initialize and verify persistence
+  -> continue to Login
+```
+
+If the client loses contact during initialization, it must check server state before offering a retry. This prevents a successful creation response from being lost and followed by an attempt to create a second initial administrator. Password requirements are displayed before submission and must come from the implemented authentication policy rather than being invented by the interface.
+
 ### Login
 
 Accepts the user's email and password. It should show invalid-credential, inactive-account, rate-limit, and server-unavailable states without revealing whether a specific account exists.
+
+The Login page distinguishes authentication failure from local server connectivity failure. It preserves the submitted email but clears the password after a failed attempt. Account recovery is not presented as an available action until the local-first recovery mechanism is approved and implemented.
 
 ### Account recovery
 
@@ -131,6 +146,21 @@ The administrator dashboard should prioritize current state:
 - shortcuts to register a game, tag, reader, or PC.
 
 The guest dashboard is restricted to permitted personal status and history. It must not reveal other users' devices, audit data, credentials, or administrative controls.
+
+Dashboard information is ordered by urgency and current state:
+
+```text
+attention required
+  -> current game session
+  -> server and agent health
+  -> latest tag activation
+  -> recent events
+  -> onboarding or quick actions
+```
+
+The current game-session panel shows session lifecycle and command-delivery status as separate labeled values. An `agent_acknowledged` command is never presented as proof that the game is `running`. When setup is incomplete, the administrator Dashboard prioritizes the guided onboarding checklist instead of empty metric cards.
+
+On narrow screens, Dashboard panels become a single ordered column and event tables become record summaries. Attention and current-session information remain ahead of historical content.
 
 ## Library
 
@@ -310,6 +340,25 @@ Every data-oriented screen must define:
 
 Destructive actions require confirmation and must explain their effect on historical records.
 
+## Database-to-experience traceability
+
+The interface groups database concepts by user goal rather than exposing table names as navigation items.
+
+| Database concept | User-facing location | Exposure rule |
+|---|---|---|
+| `users` | Administration > Users; Profile | Admin sees managed accounts; guest sees self only |
+| `devices` | Devices > Readers; Profile > My devices | Raw credentials are never retrievable |
+| `pcs` | Devices > PCs; permitted session/event context | Guest sees a PC name only for permitted activity |
+| `agents` | PC details and agent-health summaries | Presented as the connection for its registered PC |
+| `tags` | Library > Tags and guided Tag setup | UUID is available only to admins where writing/copying is required |
+| `games` | Library > Games and session/event context | Steam AppID is managed by admins and never supplied by a reader action |
+| `tag_assignments` | Guided Tag setup and Tag details | Expressed as `tag -> game -> PC`, not as a technical navigation item |
+| `game_sessions` | Activity > Sessions and current-session panels | Represents actual game-process lifecycle |
+| `launch_events` | Activity > Events and event timelines | Represents request delivery and execution progress |
+| `audit_logs` | Administration > Audit logs | Admin-only, read-only, and secret-redacted |
+| `pairing_codes` | Pair reader and Pair PC agent flows | Temporary code shown only during active pairing |
+| `auth_sessions` | Profile > Sessions when implemented | Optional feature; no unsupported session controls are implied |
+
 ## Responsive behavior
 
 Desktop is the primary administration experience. Narrow/mobile web layouts must preserve status visibility and core inspection flows, using stacked cards, drawers, or condensed tables where appropriate. Wide tables should become summaries with detail pages rather than forcing horizontal interaction for essential information.
@@ -334,12 +383,23 @@ The tray menu should provide status, open TAGAME Agent, reconnect, diagnostics/s
 
 ## Open UX decisions
 
-- Initial-admin recovery method without assuming email delivery.
-- Whether guests can see their own reader-device details or only a summary.
-- Whether a different running game is rejected or can be replaced after confirmation; current business-rule default is rejection.
-- Whether game/tag editing uses full pages, drawers, or dialogs after wireframe validation.
-- How Android and iOS display asynchronous `running` confirmation after the immediate acknowledgement.
-- Exact backup and restore confirmation flow.
+No unresolved UX decisions remain for `UX001`. Implementation-specific authentication, recovery-code security, agent transport, and backup mechanics must preserve the approved flows and follow their respective security and architecture decisions.
 
-These questions must be resolved during `UX001` before final wireframes are approved.
+## Decisions approved during UX001
+
+- Successful first-time setup continues to the normal Login instead of automatically authenticating the new administrator.
+- Initial setup creates the initial administrator only; a local system/display name belongs in Settings.
+- A guest may see the target PC name for activity they are permitted to view.
+- A guest may open safe details for their own permitted events.
+- The Getting Started checklist may be dismissed before completion and reopened later.
+- When a different game is already active on the target PC, the initial UX follows the business-rule default: reject the new start, preserve the running session, and explain that it must be stopped first.
+- Initial-administrator recovery uses a secret recovery code displayed once for offline storage, with a local CasaOS recovery procedure as the physical-access fallback.
+- Guests see only a summary of their own reader devices in Profile.
+- Complex creation, assignment, pairing, and recovery flows use full pages; simple desktop edits may use drawers; narrow/mobile uses full pages.
+- Reader integrations distinguish immediate acknowledgement from the final session result and continue following the request through `running`, `stopped`, `error`, or `timeout`.
+- Database restoration requires administrator reauthentication, a pre-restore backup, an impact summary, and typed confirmation.
+- The PC-agent interface includes an action to open the TAGAME web application.
+- Changing the PC agent's server address requires re-pairing.
+- Copied agent diagnostics are allowlisted and exclude credentials, tokens, passwords, personal paths, source IPs, unrestricted commands, and raw private-network details.
+- The Windows tray icon distinguishes an active game from an online-idle agent with a simple activity indicator.
 
