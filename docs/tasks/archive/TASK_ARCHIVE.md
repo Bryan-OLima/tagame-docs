@@ -37,3 +37,13 @@ Completed and cancelled tasks are summarized here so task history remains availa
 - **Cancelled:** 2026-10-21
 - **Reason:** Its complete migration scope overlapped with `B001`. The project owner decided to keep the backend and initial database foundation together in the more comprehensive `B001` task, which now incorporates the relevant database scope and verification requirements.
 
+## B001 — Create API and database foundation
+
+- **Area:** Backend
+- **Status:** done
+- **Owner:** Codex
+- **Completed:** 2026-10-21
+- **Files:** `tagame-server/backend/`, `tagame-server/.gitignore`, `tagame-server/README.md`
+- **Summary:** Created the Express/TypeScript/Prisma backend foundation, SQLite schema and initial migration for all 10 required core entities, runtime SQLite configuration, liveness/readiness endpoints, configuration loading, tests, and local recovery documentation. The migration wrapper applies the Prisma SQLite `RUST_LOG=info` workaround for the upstream Schema Engine defect.
+- **Verification:** Clean-database migration succeeds under Node 22.23.3; schema contains every required table and active-assignment index; rejected attempts support nullable unresolved relationships and safe fingerprints; Prisma runtime verified WAL, foreign keys, and a 5000 ms busy timeout; build, lint, and three endpoint tests pass; disposable backup restoration was tested.
+

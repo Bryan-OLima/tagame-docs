@@ -19,7 +19,6 @@ Tasks are selected by area prefix and numeric order. When the user says “pick 
 | ID | Area | Title | Status | Owner | Dependencies |
 |---|---|---|---|---|---|
 | F001 | Frontend | Create admin panel | blocked | — | B001 (pending) |
-| B001 | Backend | Create API and database foundation | ready | — | — |
 | OPS001 | DevOps | Create CasaOS application stack | blocked | — | B001 |
 | M001 | Mobile | Integrate Android NFC reader flow | blocked | — | B001 |
 | M002 | Mobile | Integrate iOS NFC shortcut flow | blocked | — | B001 |
