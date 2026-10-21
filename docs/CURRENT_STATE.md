@@ -39,6 +39,9 @@ No production application, database migration, reader integration, or PC agent h
 - Reader feedback separates acknowledgement from final game-session state.
 - Database restoration requires administrator reauthentication, a pre-restore backup, an impact summary, and typed confirmation.
 - Changing the PC agent's server address requires re-pairing, and its tray icon distinguishes online-idle from game-running state.
+- The visual system is approved under `UI001`: a dark-only cyberpunk-operational theme that favors accessible operational clarity over literal game-HUD imitation.
+- The approved visual type roles are Oxanium for display, Inter for functional UI, and JetBrains Mono for technical data; frontend font assets will be self-hosted.
+- The normalized frontend design-token source is `tagame-server/frontend/src/styles/tokens.css`; components must consume semantic tokens rather than literal visual values.
 
 ## Not yet decided
 
