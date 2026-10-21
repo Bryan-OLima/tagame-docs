@@ -1,9 +1,9 @@
 # F001 — Create Admin Panel
 
-Status: blocked
+Status: ready
 Area: frontend
 Owner: —
-Dependencies: UX001, UI001, B001
+Dependencies: UX001, UI001, B001 (done)
 
 ## Objective
 

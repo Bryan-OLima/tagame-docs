@@ -18,12 +18,18 @@ Tasks are selected by area prefix and numeric order. When the user says “pick 
 
 | ID | Area | Title | Status | Owner | Dependencies |
 |---|---|---|---|---|---|
-| F001 | Frontend | Create admin panel | blocked | — | B001 (pending) |
-| OPS001 | DevOps | Create CasaOS application stack | blocked | — | B001 |
-| M001 | Mobile | Integrate Android NFC reader flow | blocked | — | B001 |
-| M002 | Mobile | Integrate iOS NFC shortcut flow | blocked | — | B001 |
-| PC001 | PC Agent | Create C#/.NET tray agent | blocked | — | B001 |
-| QA001 | QA | Test synthetic UUID launch flow | blocked | — | B001, PC001 |
+| F001 | Frontend | Create admin panel | ready | — | UX001, UI001, B001 (done) |
+| OPS001 | DevOps | Create CasaOS application stack | ready | — | B001 (done) |
+| M001 | Mobile | Integrate Android NFC reader flow | ready | — | B001 (done) |
+| M002 | Mobile | Integrate iOS NFC shortcut flow | ready | — | B001 (done) |
+| PC001 | PC Agent | Create C#/.NET tray agent | ready | — | B001 (done) |
+| QA001 | QA | Test synthetic UUID launch flow | blocked | — | B001 (done), PC001 (pending) |
+
+## Recently completed
+
+| ID | Area | Title | Status | Owner |
+|---|---|---|---|---|
+| B001 | Backend | Create API and database foundation | done | Codex |
 
 ## Task lifecycle
 
