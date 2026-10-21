@@ -186,12 +186,14 @@ Immutable request and outcome history. One user action produces one event.
 |---|---|---|
 | `id` | UUID | Primary key |
 | `session_id` | UUID | Nullable foreign key to `game_sessions.id` |
-| `tag_id` | UUID | Foreign key to `tags.id` |
+| `tag_id` | UUID | Nullable foreign key to `tags.id`; null when the presented tag cannot be resolved |
 | `game_id` | UUID | Nullable foreign key to `games.id` |
 | `pc_id` | UUID | Nullable foreign key to `pcs.id` |
 | `agent_id` | UUID | Nullable foreign key to `agents.id` |
-| `device_id` | UUID | Foreign key to `devices.id` |
-| `action` | enum/string | `start` or `stop` |
+| `device_id` | UUID | Nullable foreign key to `devices.id`; null when the presented reader credential cannot be resolved |
+| `presented_tag_fingerprint` | string | Nullable; non-reversible, log-safe fingerprint of the presented tag identifier when no `tag_id` can be resolved |
+| `presented_device_fingerprint` | string | Nullable; non-reversible, log-safe fingerprint of the presented reader credential when no `device_id` can be resolved |
+| `action` | enum/string | Nullable until resolution; `start` or `stop` when the requested action can be determined |
 | `status` | enum/string | `received`, `validated`, `dispatched`, `agent_acknowledged`, `launch_requested`, `stop_requested`, `completed`, `rejected`, `error`, or `timeout` |
 | `result` | enum/string | Nullable until terminal; `success`, `rejected`, `error`, or `timeout` |
 | `error_message` | string | Nullable |
@@ -204,6 +206,8 @@ Immutable request and outcome history. One user action produces one event.
 | `completed_at` | timestamp | Nullable; terminal result recorded |
 
 `launch_events.status` tracks delivery and execution progress. `game_sessions.status` tracks the actual game process state. The UI may combine both into one timeline, but they must remain separate sources of truth.
+
+Rejected attempts may be recorded before a valid tag, device, game, PC, or action is resolved. In that case, the unavailable foreign keys and action remain null. Only non-reversible fingerprints generated from presented identifiers may be retained for correlation and abuse diagnosis. Raw tag payloads, reader credentials, token hashes, malformed input, and other attacker-controlled values must not be copied into logs or event fields.
 
 ### `audit_logs`
 

@@ -45,6 +45,7 @@ No production application, database migration, reader integration, or PC agent h
 
 ## Not yet decided
 
+- The endpoint and payload definitions in `API.md` remain a draft until they receive explicit project-owner review and approval.
 - Password hashing and the detailed JWT lifecycle, including refresh-token policy, token storage in the Angular client, key management, and revocation strategy.
 - Exact Android integration: Tasker/Termux or a native reader app.
 - Exact iOS integration: Shortcuts or a native reader app.
@@ -54,4 +55,4 @@ No production application, database migration, reader integration, or PC agent h
 
 ## Next recommended milestone
 
-Build a documentation-only prototype contract: define the first API request/response shapes, create synthetic database fixtures, and test the full flow with a manually supplied tag UUID before purchasing NFC tags.
+Review and approve the proposed request/response shapes in `API.md`. After approval, create synthetic database fixtures and test the full flow with a manually supplied tag UUID before purchasing NFC tags.

@@ -10,6 +10,7 @@
 - [ ] Define information architecture and low-fidelity wireframes (`UX001`).
 - [ ] Define visual identity and design system (`UI001`).
 - [ ] Record the remaining technology decisions.
+- [ ] Review and approve the initial API contract proposed in `API.md`.
 
 ## Phase 1 — Local proof of concept
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-Initial contract for the first implementation. This document defines the minimum HTTP surface for the CasaOS API, the web application, authenticated reader devices, and the PC agent.
+Draft contract for the first implementation, pending explicit project-owner review and approval. It proposes the minimum HTTP surface for the CasaOS API, the web application, authenticated reader devices, and the PC agent. Its existence does not by itself make every endpoint or payload an approved decision.
 
 The API is versioned under `/api/v1`. Additive and backward-compatible changes may remain in `v1`; incompatible changes require a new version.
 
@@ -180,15 +180,11 @@ Response `202`:
 }
 ```
 
-The API may reject the request before creating or after creating an event according to the event-audit rule. Every accepted, rejected, failed, or timed-out action must be represented in `launch_events`.
+The API may reject the request before or after resolving the device, tag, assignment, and action. Every accepted, rejected, failed, or timed-out attempt must be represented in `launch_events`. Unresolved foreign keys and action may be null; only non-reversible, log-safe fingerprints of presented identifiers may be retained. Raw tag payloads, reader credentials, credential hashes, malformed input, and unrestricted caller-controlled values must not be persisted in event or application logs.
 
 ### `GET /api/v1/reader/devices/me`
 
 Returns the reader device's safe identity and status. It must not return the raw device token.
-
-### `POST /api/v1/reader/devices/:device_id/revoke`
-
-Allows an administrator to revoke a reader device. A guest may not revoke arbitrary devices.
 
 ## PC agent endpoints
 

@@ -20,8 +20,7 @@ Tasks are selected by area prefix and numeric order. When the user says “pick 
 |---|---|---|---|---|---|
 | F001 | Frontend | Create admin panel | blocked | — | B001 (pending) |
 | B001 | Backend | Create API and database foundation | ready | — | — |
-| DB001 | Database | Create initial migrations | ready | — | — |
-| OPS001 | DevOps | Create CasaOS application stack | blocked | — | B001, DB001 |
+| OPS001 | DevOps | Create CasaOS application stack | blocked | — | B001 |
 | M001 | Mobile | Integrate Android NFC reader flow | blocked | — | B001 |
 | M002 | Mobile | Integrate iOS NFC shortcut flow | blocked | — | B001 |
 | PC001 | PC Agent | Create C#/.NET tray agent | blocked | — | B001 |

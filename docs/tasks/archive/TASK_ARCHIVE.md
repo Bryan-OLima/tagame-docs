@@ -29,3 +29,11 @@ Completed and cancelled tasks are summarized here so task history remains availa
 - **Summary:** Approved the dark-only cyberpunk-operational design language, using accessible system-console clarity rather than proprietary game-HUD imitation. Defined semantic colors, contrast-validated status treatments, self-hosted type roles, responsive layout rules, component contracts, motion, accessibility, and examples for the webapp and PC agent. Added the normalized 183-token CSS custom-property source for frontend consumption.
 - **Verification:** Required documents and `tokens.css` exist; every CSS token reference resolves; all validated text/action/status pairs meet 4.5:1 or above; focus contrast exceeds 3:1; desktop/mobile, admin/guest, failure states, and PC-agent/tray guidance are covered; no examples expose credentials, arbitrary commands, or reader-supplied Steam AppIDs; project owner approved completion.
 
+## DB001 — Create initial migrations
+
+- **Area:** Database
+- **Status:** cancelled
+- **Owner:** Project coordination
+- **Cancelled:** 2026-10-21
+- **Reason:** Its complete migration scope overlapped with `B001`. The project owner decided to keep the backend and initial database foundation together in the more comprehensive `B001` task, which now incorporates the relevant database scope and verification requirements.
+

@@ -114,8 +114,10 @@ Only an existing administrator may grant or revoke administrator access. The ini
 
 ## Audit and retention
 
-1. Every accepted, rejected, successful, failed, or timed-out start/stop request creates a `launch_events` record.
-2. Administrative changes create an `audit_logs` record.
-3. Logs include actor/device, tag, game, PC, action, result, and timestamp where known.
-4. Logs may contain a source IP for local diagnostics, but never raw tokens or passwords.
-5. Deleting a tag, game, device, or user should preserve historical event records through nullable references or archival state rather than silently rewriting history.
+1. Every accepted, rejected, successful, failed, or timed-out start/stop attempt creates a `launch_events` record.
+2. When an attempted tag or reader credential cannot be resolved, unavailable foreign keys and the unresolved action may remain null. TAGAME may retain only a non-reversible, log-safe fingerprint of the presented identifier for correlation and abuse diagnosis.
+3. Raw tag payloads, raw credentials, credential hashes, malformed input, and unrestricted caller-controlled values must never be copied into event or application logs.
+4. Administrative changes create an `audit_logs` record.
+5. Logs include actor/device, tag, game, PC, action, result, and timestamp where known.
+6. Logs may contain a source IP for local diagnostics, but never raw tokens or passwords.
+7. Deleting a tag, game, device, or user should preserve historical event records through nullable references or archival state rather than silently rewriting history.
